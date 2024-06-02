@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { toast } from "sonner";
+import { useUserContext } from "@/lib/context";
 
 export enum ActiveYn {
   Y = "Y",
@@ -38,7 +39,8 @@ export interface User {
 }
 
 const UserTable = () => {
-  const [users, setUsers] = useState([]);
+  const { users: arrayUsers } = useUserContext();
+  const [users, setUsers] = useState<User[]>([]);
   const fetchUsers = async () => {
     try {
       const res = await axios.get(
@@ -55,6 +57,9 @@ const UserTable = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+  useEffect(() => {
+    setUsers(arrayUsers);
+  }, [arrayUsers]);
   const removeUser = async (username: string) => {
     try {
       const res = await axios.delete(

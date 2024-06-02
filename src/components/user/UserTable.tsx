@@ -12,6 +12,17 @@ import axios from "axios";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { toast } from "sonner";
 
 export enum ActiveYn {
   Y = "Y",
@@ -22,14 +33,14 @@ export interface User {
   username: string;
   fullname: string;
   role: string;
-  projects: string[];
+  projects: string[] | null;
   activeYn: ActiveYn;
 }
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
-  useEffect(() => {
-    const fetchUser = async () => {
+  const fetchUsers = async () => {
+    try {
       const res = await axios.get(
         process.env.NEXT_PUBLIC_SERVER_URL! + "/user/search",
         {
@@ -37,9 +48,28 @@ const UserTable = () => {
         }
       );
       setUsers(res.data);
-    };
-    fetchUser();
+    } catch (ex) {
+      console.error(ex);
+    }
+  };
+  useEffect(() => {
+    fetchUsers();
   }, []);
+  const removeUser = async (username: string) => {
+    try {
+      const res = await axios.delete(
+        process.env.NEXT_PUBLIC_SERVER_URL! + `/user/${username}`
+      );
+      if (res.status === 200) toast.success("Delete successfully!");
+    } catch (ex) {
+      console.error(ex);
+    }
+  };
+  async function handleDeleteUser(username: string) {
+    await removeUser(username);
+    await fetchUsers();
+  }
+
   return (
     <Table className="mt-5">
       <TableCaption>A list of your recent users.</TableCaption>
@@ -79,9 +109,31 @@ const UserTable = () => {
                         <Pencil />
                       </Button>
                     </Link>
-                    <Button className="p-5 bg-red-500">
-                      <Trash2 />
-                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button className="p-5 bg-red-500">
+                          <Trash2 />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Are you absolutely sure?</DialogTitle>
+                          <DialogDescription>
+                            You want to delete user {user.username}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button
+                              className="bg-red-700"
+                              onClick={() => handleDeleteUser(user.username)}
+                            >
+                              Confirm
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </TableCell>
               </TableRow>

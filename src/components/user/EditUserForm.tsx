@@ -56,8 +56,7 @@ export function EditUserForm() {
           form.setValue("fullname", data.fullname);
           form.setValue("role", data.role);
           form.setValue("activeYn", data.activeYn === "Y" ? true : false);
-          form.setValue("projects", data.projects);
-          setProjects(data.projects);
+          setProjects(data.projects || []);
         }
       } catch (ex) {
         console.error(ex);
@@ -71,7 +70,7 @@ export function EditUserForm() {
       const user: User = {
         ...data,
         username: username,
-        projects,
+        projects: projects.length > 0 ? projects : null,
         activeYn: data.activeYn ? ActiveYn.Y : ActiveYn.N,
       };
       try {
@@ -192,7 +191,7 @@ export function EditUserForm() {
                 </PopoverContent>
               </Popover>
               <div className="flex flex-wrap items-center gap-2 ">
-                {projects.length > 0 &&
+                {projects?.length > 0 &&
                   projects.map((item, index) => (
                     <div
                       className="flex items-center bg-gray-200 p-1 rounded-md"
@@ -211,13 +210,16 @@ export function EditUserForm() {
                           );
                         }}
                       />
-                      <Button
-                        onClick={() => handleDeleteProject(index)}
-                        variant={"destructive"}
-                        className="w-fit h-fit p-1 ms-1"
-                      >
-                        <X className="w-3 h-3" />
-                      </Button>
+                      <div>
+                        <Button
+                          onClick={() => handleDeleteProject(index)}
+                          type="button"
+                          variant={"destructive"}
+                          className="w-fit h-fit p-1 ms-1"
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
               </div>

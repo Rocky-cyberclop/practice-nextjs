@@ -57,7 +57,7 @@ export function CreateUserForm() {
   async function onSubmit(data: CreateUser) {
     const user: User = {
       ...data,
-      projects,
+      projects: projects.length > 0 ? projects : null,
       activeYn: data.activeYn ? ActiveYn.Y : ActiveYn.N,
     };
     try {
@@ -68,6 +68,7 @@ export function CreateUserForm() {
       if (res.status === 201) {
         toast.success("Create User Successfully !!");
         form.reset();
+        setProjects([]);
       }
     } catch (ex) {
       console.error(ex);

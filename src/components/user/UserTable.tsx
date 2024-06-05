@@ -39,8 +39,9 @@ export interface User {
 }
 
 const UserTable = () => {
-  const { users: arrayUsers } = useUserContext();
+  const { users: searchedUsers } = useUserContext();
   const [users, setUsers] = useState<User[]>([]);
+
   const fetchUsers = async () => {
     try {
       const res = await axios.get(
@@ -57,9 +58,11 @@ const UserTable = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
   useEffect(() => {
-    setUsers(arrayUsers);
-  }, [arrayUsers]);
+    setUsers(searchedUsers);
+  }, [searchedUsers]);
+
   const removeUser = async (username: string) => {
     try {
       const res = await axios.delete(
@@ -70,6 +73,7 @@ const UserTable = () => {
       console.error(ex);
     }
   };
+
   async function handleDeleteUser(username: string) {
     await removeUser(username);
     await fetchUsers();

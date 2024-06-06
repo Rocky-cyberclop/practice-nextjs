@@ -69,11 +69,11 @@ export const SearchToolbar = () => {
         ...userSearch,
         projects,
       },
-      { arrayFormat: "brackets" }
+      { arrayFormat: "brackets" },
     );
     try {
       const res = await axios.get(
-        process.env.NEXT_PUBLIC_SERVER_URL! + `/user/search?${queryString}`
+        process.env.NEXT_PUBLIC_SERVER_URL! + `/user/search?${queryString}`,
       );
       if (res.status === 200) setUsers(res.data);
     } catch (ex) {
@@ -128,8 +128,8 @@ export const SearchToolbar = () => {
                 Add Project
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-96 flex flex-col items-center gap-2">
-              <h4 className="text-center font-semibold text-lg">
+            <PopoverContent className="flex w-96 flex-col items-center gap-2">
+              <h4 className="text-center text-lg font-semibold">
                 Add Projects
               </h4>
               <Input
@@ -144,20 +144,20 @@ export const SearchToolbar = () => {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex flex-wrap items-center gap-2 mt-1">
+        <div className="mt-1 flex flex-wrap items-center gap-2">
           {projects.length > 0 &&
             projects.map((item, index) => (
               <div
-                className="flex items-center bg-gray-200 p-1 rounded-md"
+                className="flex items-center rounded-md bg-gray-200 p-1"
                 key={index}
               >
                 <div key={index}>{item}</div>
                 <Button
                   onClick={() => handleDeleteProject(index)}
                   variant={"destructive"}
-                  className="w-fit h-fit p-1 ms-1"
+                  className="ms-1 h-fit w-fit p-1"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="h-3 w-3" />
                 </Button>
               </div>
             ))}
@@ -180,7 +180,7 @@ export const SearchToolbar = () => {
           </div>
         </RadioGroup>
       </div>
-      <div className="w-60 flex justify-end items-center">
+      <div className="flex w-60 items-center justify-end">
         <Button type="button" onClick={handleSubmit}>
           Search
         </Button>

@@ -14,7 +14,7 @@ export const RootLayout = ({ children }: IRootProps) => {
       <main className={cn("flex flex-col gap-2 p-10", inter.className)}>
         {children}
       </main>
-      <Toaster />
+      <Toaster richColors />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { User } from "@/components/user/UserTable";
+import { User } from "@/components/user/UserTableWithTanStack";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 interface IUserContext {
@@ -8,10 +8,11 @@ interface IUserContext {
 
 const UserContext = createContext<IUserContext | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [users, setUsers] = useState<User[]>([]);
+export const UserProvider: React.FC<{
+  children: ReactNode;
+  initData: User[];
+}> = ({ children, initData }) => {
+  const [users, setUsers] = useState<User[]>(initData);
   return (
     <UserContext.Provider value={{ users, setUsers }}>
       {children}

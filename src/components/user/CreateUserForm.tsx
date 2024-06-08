@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import axios from "axios";
 import { toast } from "sonner";
-import { ActiveYn, User } from "./UserTable";
+import { ActiveYn } from "./UserTableWithTanStack";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -25,17 +25,17 @@ import { useState } from "react";
 
 interface CreateUser {
   username: string;
-  fullname: string;
+  fullName: string;
   role: string;
   projects: string[];
   activeYn: boolean;
 }
 
 const FormSchema = z.object({
-  fullname: z.string().optional(),
   username: z.string().min(1, {
     message: "Username is required",
   }),
+  fullName: z.string().optional(),
   role: z.string().optional(),
   activeYn: z.boolean(),
 });
@@ -44,7 +44,7 @@ export function CreateUserForm() {
   const form = useForm<CreateUser>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      fullname: "",
+      fullName: "",
       username: "",
       role: "",
       activeYn: true,
@@ -55,7 +55,7 @@ export function CreateUserForm() {
   const [proj, setProj] = useState<string>("");
 
   async function onSubmit(data: CreateUser) {
-    const user: User = {
+    const user = {
       ...data,
       projects: projects.length > 0 ? projects : null,
       activeYn: data.activeYn ? ActiveYn.Y : ActiveYn.N,
@@ -63,7 +63,7 @@ export function CreateUserForm() {
     try {
       const res = await axios.post(
         process.env.NEXT_PUBLIC_SERVER_URL! + "/user/insert",
-        user
+        user,
       );
       if (res.status === 201) {
         toast.success("Create User Successfully !!");
@@ -91,14 +91,14 @@ export function CreateUserForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="gap-4  flex flex-col w-1/2 container"
+        className="container flex w-1/2 flex-col gap-4"
       >
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-base">
+              <FormLabel className="text-base font-semibold">
                 Username
               </FormLabel>
               <FormControl>
@@ -110,10 +110,10 @@ export function CreateUserForm() {
         />
         <FormField
           control={form.control}
-          name="fullname"
+          name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-base">
+              <FormLabel className="text-base font-semibold">
                 Full name
               </FormLabel>
               <FormControl>
@@ -129,7 +129,7 @@ export function CreateUserForm() {
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-base">Role</FormLabel>
+              <FormLabel className="text-base font-semibold">Role</FormLabel>
               <FormControl>
                 <Input placeholder="Type the role..." {...field} />
               </FormControl>
@@ -169,8 +169,8 @@ export function CreateUserForm() {
                     Add Project
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-96 flex flex-col items-center gap-2">
-                  <h4 className="text-center font-semibold text-lg">
+                <PopoverContent className="flex w-96 flex-col items-center gap-2">
+                  <h4 className="text-center text-lg font-semibold">
                     Add Projects
                   </h4>
                   <Input
@@ -187,23 +187,19 @@ export function CreateUserForm() {
                   </Button>
                 </PopoverContent>
               </Popover>
-              <div className="flex flex-wrap items-center gap-2 ">
+              <div className="flex flex-wrap items-center gap-2">
                 {projects.length > 0 &&
                   projects.map((item, index) => (
                     <div
-                      className="flex items-center bg-gray-200 p-1 rounded-md"
-                      key={index}
+                      className="flex items-center rounded-md bg-gray-200 p-1"
+                      key={item}
                     >
                       <FormField
-                        key={index}
                         control={form.control}
                         name="projects"
                         render={({ field }) => {
                           return (
-                            <FormItem
-                              key={index}
-                              className="flex flex-row items-start space-x-3 space-y-0"
-                            >
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                               <FormLabel className="font-normal">
                                 {item}
                               </FormLabel>
@@ -214,9 +210,9 @@ export function CreateUserForm() {
                       <Button
                         onClick={() => handleDeleteProject(index)}
                         variant={"destructive"}
-                        className="w-fit h-fit p-1 ms-1"
+                        className="ms-1 h-fit w-fit p-1"
                       >
-                        <X className="w-3 h-3" />
+                        <X className="h-3 w-3" />
                       </Button>
                     </div>
                   ))}

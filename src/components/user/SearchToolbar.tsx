@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -11,7 +11,7 @@ import { useUserContext } from "@/lib/context";
 
 interface ISearch {
   username: string;
-  fullname: string;
+  fullName: string;
   role: string;
 }
 
@@ -19,7 +19,7 @@ export const SearchToolbar = () => {
   const { setUsers } = useUserContext();
   const [searchParams, setSearchParams] = useState({
     username: "",
-    fullname: "",
+    fullName: "",
     role: "",
   });
   const [projects, setProjects] = useState<string[]>([]);
@@ -100,8 +100,8 @@ export const SearchToolbar = () => {
       <div className="w-80">
         <Label>Fullname</Label>
         <Input
-          name="fullname"
-          value={searchParams.fullname}
+          name="fullName"
+          value={searchParams.fullName}
           placeholder="Search by fullname..."
           onChange={(evt) =>
             handleParamsChange(evt.target.name, evt.target.value)
@@ -149,9 +149,9 @@ export const SearchToolbar = () => {
             projects.map((item, index) => (
               <div
                 className="flex items-center rounded-md bg-gray-200 p-1"
-                key={index}
+                key={item}
               >
-                <div key={index}>{item}</div>
+                <div>{item}</div>
                 <Button
                   onClick={() => handleDeleteProject(index)}
                   variant={"destructive"}

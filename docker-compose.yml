@@ -1,0 +1,52 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 992002
+      POSTGRES_DB: jwat_nest_practice
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres -d jwat_nest_practice"
+        ]
+      interval: 2s
+      timeout: 5s
+      retries: 2
+
+  backend:
+    image: rockyoperation/jwat-practice-backend:3.1
+    ports:
+      - 3001:3009
+    environment:
+      PORT: 3009
+      DB_NAME: jwat_nest_practice
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 992002
+      DB_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    image: rockyoperation/jwat-practice-frontend:3.1
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+      NEXT_PUBLIC_SERVER_URL: http://backend:3009
+      NEXT_PUBLIC_SERVER_URL_CLIENT_COMPONENT: http://localhost:3001
+
+volumes:
+  postgres-data:
+
+

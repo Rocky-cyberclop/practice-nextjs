@@ -7,10 +7,10 @@ import { SearchToolbar } from "./SearchToolbar";
 export const ToolBar = () => {
   return (
     <>
-      <div className="w-full flex justify-end gap-2">
+      <div className="flex w-full justify-end gap-2">
         <Link href="/user/add">
           <Button className="gap-2">
-            <UserPlus2 className="w-5 h5"></UserPlus2>
+            <UserPlus2 className="h5 w-5"></UserPlus2>
             <span>Add user</span>
           </Button>
         </Link>

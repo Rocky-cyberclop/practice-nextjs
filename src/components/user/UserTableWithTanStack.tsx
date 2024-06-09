@@ -78,13 +78,12 @@ const handleAction = (
 };
 
 const UserTableWithTanStack = () => {
+  const { server_url } = useUserContext();
   const { users, setUsers } = useUserContext();
 
   const removeUser = async (username: string) => {
     try {
-      const res = await axios.delete(
-        process.env.NEXT_PUBLIC_SERVER_URL! + `/user/${username}`,
-      );
+      const res = await axios.delete(server_url + `/user/${username}`);
       if (res.status === 200) {
         toast.success("Delete successfully!");
         setUsers((pre) => {
@@ -98,7 +97,6 @@ const UserTableWithTanStack = () => {
 
   async function handleDeleteUser(username: string) {
     await removeUser(username);
-    // await fetchUsers();
   }
 
   const columns: ColumnDef<User>[] = [

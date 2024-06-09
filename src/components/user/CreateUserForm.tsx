@@ -22,6 +22,7 @@ import { Switch } from "../ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { useUserContext } from "@/lib/context";
 
 interface CreateUser {
   username: string;
@@ -41,6 +42,7 @@ const FormSchema = z.object({
 });
 
 export function CreateUserForm() {
+  const { server_url } = useUserContext();
   const form = useForm<CreateUser>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -61,16 +63,14 @@ export function CreateUserForm() {
       activeYn: data.activeYn ? ActiveYn.Y : ActiveYn.N,
     };
     try {
-      const res = await axios.post(
-        process.env.NEXT_PUBLIC_SERVER_URL! + "/user/insert",
-        user,
-      );
+      const res = await axios.post(server_url + "/user/insert", user);
       if (res.status === 201) {
         toast.success("Create User Successfully !!");
         form.reset();
         setProjects([]);
       }
     } catch (ex) {
+      toast.error("Username existed!");
       console.error(ex);
     }
   }

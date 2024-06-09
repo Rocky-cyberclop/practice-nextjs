@@ -46,7 +46,7 @@ export function EditUserForm({
 }: Readonly<{
   user: User;
 }>) {
-  const { setUsers } = useUserContext();
+  const { server_url, setUsers } = useUserContext();
   const form = useForm<UpdateUser>({
     defaultValues: {
       fullName: "",
@@ -79,7 +79,7 @@ export function EditUserForm({
     };
     try {
       const res = await axios.patch(
-        process.env.NEXT_PUBLIC_SERVER_URL! + `/user/${user.username}`,
+        server_url + `/user/${user.username}`,
         userUpdate,
       );
       if (res.status === 200) {

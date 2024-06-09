@@ -7,7 +7,13 @@ import axios from "axios";
 import Head from "next/head";
 import React from "react";
 
-const UserPage = ({ data }: { data: User[] }) => {
+const UserPage = ({
+  data,
+  server_url,
+}: {
+  data: User[];
+  server_url: string;
+}) => {
   return (
     <>
       <Head key={"user"}>
@@ -17,7 +23,7 @@ const UserPage = ({ data }: { data: User[] }) => {
         <h1 className="text-center text-2xl font-bold text-primary">
           User management aplication
         </h1>
-        <UserProvider initData={data}>
+        <UserProvider initData={data} server_url={server_url}>
           <ToolBar></ToolBar>
           <UserTableWithTanStack></UserTableWithTanStack>
         </UserProvider>
@@ -34,7 +40,8 @@ export async function getServerSideProps() {
       process.env.NEXT_PUBLIC_SERVER_URL! + "/user/search",
     );
     const data = res.data;
-    return { props: { data } };
+    const server_url = process.env.NEXT_PUBLIC_SERVER_URL_CLIENT_COMPONENT;
+    return { props: { data, server_url } };
   } catch (ex) {
     console.error(ex);
   }

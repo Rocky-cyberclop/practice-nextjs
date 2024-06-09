@@ -16,7 +16,7 @@ interface ISearch {
 }
 
 export const SearchToolbar = () => {
-  const { setUsers } = useUserContext();
+  const { server_url, setUsers } = useUserContext();
   const [searchParams, setSearchParams] = useState({
     username: "",
     fullName: "",
@@ -52,6 +52,7 @@ export const SearchToolbar = () => {
   };
 
   const searchUsers = async () => {
+    console.log(process.env);
     const searchParamRecords: { [key: string]: string } = searchParams;
     let userSearch = {};
     for (const property in searchParamRecords) {
@@ -72,9 +73,7 @@ export const SearchToolbar = () => {
       { arrayFormat: "brackets" },
     );
     try {
-      const res = await axios.get(
-        process.env.NEXT_PUBLIC_SERVER_URL! + `/user/search?${queryString}`,
-      );
+      const res = await axios.get(server_url + `/user/search?${queryString}`);
       if (res.status === 200) setUsers(res.data);
     } catch (ex) {
       console.error(ex);

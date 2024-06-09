@@ -4,6 +4,7 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 interface IUserContext {
   users: User[];
   setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  server_url: string;
 }
 
 const UserContext = createContext<IUserContext | undefined>(undefined);
@@ -11,10 +12,11 @@ const UserContext = createContext<IUserContext | undefined>(undefined);
 export const UserProvider: React.FC<{
   children: ReactNode;
   initData: User[];
-}> = ({ children, initData }) => {
+  server_url: string;
+}> = ({ children, initData, server_url }) => {
   const [users, setUsers] = useState<User[]>(initData);
   return (
-    <UserContext.Provider value={{ users, setUsers }}>
+    <UserContext.Provider value={{ server_url, users, setUsers }}>
       {children}
     </UserContext.Provider>
   );

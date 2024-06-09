@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Trash2 } from "lucide-react";
+import { ArrowUpDown, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { EditUserForm } from "./EditUserForm";
 
@@ -104,19 +104,69 @@ const UserTableWithTanStack = () => {
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "username",
-      header: "Username",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Username
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
     },
     {
       accessorKey: "fullName",
-      header: "Full Name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Full name
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
     },
     {
       accessorKey: "role",
-      header: "Role",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Role
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
     },
     {
       accessorKey: "projects",
-      header: "Projects",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Project
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      sortingFn: (rowA, rowB) => {
+        let res = 0;
+        const aProjects = rowA.original.projects;
+        const bProjects = rowB.original.projects;
+        res = aProjects.length > bProjects.length ? 1 : -1;
+        if (aProjects.length === bProjects.length) {
+          res = aProjects[0].name > bProjects[0].name ? 1 : -1;
+        }
+        return res;
+      },
       cell: ({ row }) => {
         const projects: Project[] = row.getValue("projects");
         return (
@@ -145,8 +195,6 @@ const UserTableWithTanStack = () => {
       },
     },
   ];
-
-  // console.log(Math.random());
 
   return (
     <div className="py-10">

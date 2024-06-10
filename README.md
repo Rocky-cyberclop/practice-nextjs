@@ -12,16 +12,14 @@
 
 ## Run this project by the command
 
+Step 1: Install docker desktop
+
+Step 2: Use Docker Compose's command in this directory:
+
 ```
-    yarn yarn dev
+    docker-compose -f docker-compose.yml up -d
 ```
 
-The web server has been uploaded to the cloud but the first request to the cloud may take 50s to load so please be patient
-
-# Link demo
-
-https://practice-nextjs-rho.vercel.app/
-
-# Or watch video demo
+# Watch video demo
 
 https://youtu.be/lKpmlt3OWrU

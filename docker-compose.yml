@@ -19,7 +19,7 @@ services:
           "pg_isready -U postgres -d jwat_nest_practice"
         ]
       interval: 2s
-      timeout: 5s
+      timeout: 2s
       retries: 2
 
   backend:

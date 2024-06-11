@@ -22,4 +22,4 @@ Step 2: Use Docker Compose's command in this directory:
 
 # Watch video demo
 
-https://youtu.be/lKpmlt3OWrU
+https://youtu.be/asMzKHLeNL8?si=nBVEtlFs03hljoiY
